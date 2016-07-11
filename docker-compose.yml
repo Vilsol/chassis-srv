@@ -23,7 +23,7 @@ services:
       - "8529:8529"
     environment:
       ARANGO_NO_AUTH: 1
-    volumes-from:
+    volumes_from:
       - arango-persist
   arango-persist:
     image: arangodb
