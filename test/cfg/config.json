@@ -143,7 +143,7 @@
       "provider": "kafka",
       "groupId": "restore-chassis-test-server",
       "clientId": "restore-chassis-test-server",
-      "connectionString": "localhost:9092",
+      "connectionString": "127.0.0.1:9092",
       "protos": ["test/test.proto"],
       "protoRoot": "protos/"
     },
