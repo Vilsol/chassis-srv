@@ -24,6 +24,6 @@ services:
     environment:
       ARANGO_NO_AUTH: 1
     volumes_from:
-      - arango-persist
-  arango-persist:
+      - arango_persist
+  arango_persist:
     image: arangodb
