@@ -22,7 +22,7 @@ before_install:
   - docker version
   - docker-compose version
   - docker-compose up -d
-  - wait 4
+  - sleep 4
   - docker-compose ps
 scripts:
   - 'npm test'
