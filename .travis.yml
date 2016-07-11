@@ -6,7 +6,6 @@ cache:
 node_js:
     - "6"
 env:
-  - COVERALLS=1
   - DOCKER_COMPOSE_VERSION=1.7.0
 git:
   depth: 10
@@ -19,7 +18,6 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   - 'npm config set loglevel error'
-before_script:
   - docker-compose up -d chassis
   - wait 4
   - docker-compose ps
