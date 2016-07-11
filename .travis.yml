@@ -21,7 +21,7 @@ before_install:
   - 'npm config set loglevel error'
   - docker version
   - docker-compose version
-  - docker-compose up -d chassis
+  - docker-compose up -d
   - wait 4
   - docker-compose ps
 scripts:
