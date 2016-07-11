@@ -7,6 +7,7 @@ node_js:
     - "6"
 env:
   - COVERALLS=1
+  - DOCKER_COMPOSE_VERSION=1.7.0
 git:
   depth: 10
 services:
@@ -14,14 +15,14 @@ services:
 before_install:
   - sudo apt-get update
   - sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y docker-engine
+  - curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
   - 'npm config set loglevel error'
-  - docker-compose up -d
 before_script:
-  - sleep 10
-  - docker ps -a
-  - docker logs chassis_adb
-  - docker logs chassis_zk
-  - docker logs chassis_kafka
+  - docker-compose up -d chassis
+  - wait 4
+  - docker-compose ps
 scripts:
   - 'npm test'
   - 'cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js'
