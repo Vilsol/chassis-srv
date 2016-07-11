@@ -14,7 +14,13 @@ services:
 before_install:
   - sudo apt-get update
   - sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y docker-engine
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/1.7.0/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
   - 'npm config set loglevel error'
+  - docker version
+  - docker-compose version
   - docker-compose up -d chassis
   - wait 4
   - docker-compose ps
