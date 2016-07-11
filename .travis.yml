@@ -24,6 +24,8 @@ before_install:
   - docker-compose up -d
   - sleep 4
   - docker-compose ps
+  - docker-compose logs
 scripts:
   - 'npm test'
   - 'cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js'
+  - docker-compose logs
