@@ -34,6 +34,7 @@ message TestEvent {
   option (io.restorecommerce.event.event) = "test.wait.test-event";
   string value = 1;
   int32 count = 2;
+  map<string, string> kv = 3;
 };
 
 message ExtendMe {
