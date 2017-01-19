@@ -15,6 +15,7 @@ const sync = require('gostd').sync;
 const isGeneratorFn = require('is-generator').fn;
 const logger = require('./logger_test.js');
 const chassis = require('../');
+const protobuf = require('protobufjs');
 
 const config = chassis.config;
 const Events = chassis.events.Events;
@@ -47,10 +48,8 @@ describe('events', () => {
       const topicName = 'test';
       let topic;
       const eventName = 'test-event';
-      const testProto = require('./protos/test_pb.js');
-      const testMessage = new testProto.TestEvent();
-      testMessage.setValue('value');
-      testMessage.setCount(1);
+
+      const testMessage = { value: 'testValue', count: 1 };
 
       before(function* start() {
         this.timeout(10000);
@@ -129,14 +128,28 @@ describe('events', () => {
         it('should allow emitting', function* sendEvents() {
           this.timeout(20000);
           const wg = new sync.WaitGroup();
+          let buff = [];
+
           const listener = function* listener(message, context) {
-            const messageConverted = testProto.TestEvent.deserializeBinary(
-              new Uint8Array(message.value));
-            should.exist(message);
-            testMessage.getValue().should.equal(messageConverted.getValue());
-            testMessage.getCount().should.equal(messageConverted.getCount());
+            function* decodeObject() {
+              const protoRoot = yield protobuf.load('./protos/test/test.proto')
+              .then((root) => {
+                return root;
+              }).catch((err) => {
+                console.error('Error creating protobuf object', err, err.stack);
+              });
+              const root = protoRoot;
+              const TestEvent = root.lookup('test.TestEvent');
+              const buffer = TestEvent.decode(message);
+              return buffer;
+            }
+
+            buff = yield decodeObject();
+            testMessage.value.should.equal(buff.value);
+            testMessage.count.should.equal(buff.count);
             wg.done();
           };
+
           wg.add(1);
           yield topic.on(eventName, listener);
           setImmediate(() => {

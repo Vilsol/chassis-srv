@@ -29,12 +29,7 @@ describe('Kafka events provider', () => {
   describe('topic.$wait', function testWait() {
     this.timeout(5000);
     it('should wait until the event message is processed', function* waitUntil() {
-      const testProto = require('./protos/test_pb.js');
-
-      const testMessage = new testProto.TestEvent();
-      testMessage.setValue('value');
-      testMessage.setCount(1);
-
+      const testMessage = { value: 'value', count: 1 };
       const topic = yield events.topic('test.wait');
       let receivedOffset = yield topic.$offset(-1);
       yield topic.on('test-event', function* onTestEvent(message, context) {
