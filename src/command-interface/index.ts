@@ -106,7 +106,7 @@ export class CommandInterface implements ICommandInterface {
       health_check: this.check,
       version: this.version
     };
-    const topicCfg = config.events.kafka.topics.command;
+    const topicCfg = config.events.kafka.topics.commandinterface;
     this.commandTopic = events.topic(topicCfg.topic);
   }
   /**
